@@ -5,10 +5,8 @@ Created for: @bolapelangi2_bot
 """
 
 import logging
-import asyncio
-from datetime import datetime
 from telegram import Update, ChatMember
-from telegram.ext import Application, MessageHandler, filters, ContextTypes
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 from telegram.constants import ParseMode
 
 # ==================== KONFIGURASI ====================
@@ -17,31 +15,10 @@ from telegram.constants import ParseMode
 BOT_TOKEN = "8793227199:AAEXajy3RDO7SpMSCloj13Z4ubX3DXNvN4M"
 
 # GANTI DENGAN USERNAME CHANNEL KAMU!
-CHANNEL_USERNAME = ""  # Ganti dengan username channel kamu
+CHANNEL_USERNAME = "@bolapelangi2_channel"  # ISI DENGAN USERNAME CHANNEL ASLI!
 
-# ID CHANNEL (opsional, bisa pakai username atau ID)
-CHANNEL_ID = -1003573191693  # Ganti dengan ID channel kamu (angka negatif)
-
-# PESAN WELCOME
-WELCOME_MESSAGE = """
-🎉 *SELAMAT DATANG DI BOLAPELANGI 2 COMMUNITY!* 🎉
-
-Halo {mention}!
-
-Terima kasih sudah bergabung dengan channel resmi kami. 
-Jangan lupa untuk:
-
-✅ Follow semua channel official kami:
-   • Bot: @bolapelangi2_bot
-   • Channel WA: https://bopel2.vip/Channel-Whatsapp
-   • Channel TG: https://bopel2.vip/Channel-Telegram
-
-✅ Baca aturan & promo terbaru:
-   • Cashback 100% Mix Parlay
-   • Bonus harian Rp 300.000
-
-🔥 *GasPoll terus parlaynya Bosku!* 🔥
-"""
+# ID CHANNEL (SUDAH BENAR)
+CHANNEL_ID = -1003573191693
 
 # ==================== KONFIGURASI LOGGING ====================
 
@@ -53,30 +30,124 @@ logger = logging.getLogger(__name__)
 
 # ==================== FUNGSI UTAMA ====================
 
+async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /start command"""
+    user = update.effective_user
+    text = (
+        f"Halo {user.first_name}! 👋\n\n"
+        f"Selamat datang di *BOLAPELANGI 2 Bot*!\n\n"
+        f"🤖 *Apa yang bisa saya bantu?*\n"
+        f"• Saya akan menyapa member baru di channel\n"
+        f"• Info promo terbaru\n"
+        f"• Cara klaim bonus\n\n"
+        f"📌 *Link Penting:*\n"
+        f"• Channel: {CHANNEL_USERNAME}\n"
+        f"• Klaim Bonus: https://bopel2.link/wa\n"
+        f"• Prediksi: https://bopel2.vip/ChannelWA-Jadwal-Prediksi\n\n"
+        f"🔥 *GasPoll!* 🔥"
+    )
+    await update.message.reply_text(text, parse_mode=ParseMode.MARKDOWN)
+
+async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /help command"""
+    text = (
+        "📚 *BANTUAN BOT BOLAPELANGI 2*\n\n"
+        "*Fitur Bot:*\n"
+        "• /start - Mulai bot\n"
+        "• /help - Bantuan ini\n"
+        "• /promo - Info promo terbaru\n"
+        "• /aturan - Syarat & ketentuan\n"
+        "• /kontak - Kontak official\n\n"
+        "*Untuk Admin:*\n"
+        f"Bot akan otomatis menyapa member baru yang join ke channel {CHANNEL_USERNAME}\n\n"
+        "*Kendala Teknis?*\n"
+        "Hubungi WA Official: https://bopel2.link/wa"
+    )
+    await update.message.reply_text(text, parse_mode=ParseMode.MARKDOWN)
+
+async def promo_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /promo command"""
+    text = (
+        "🎁 *PROMO SPESIAL BOLAPELANGI 2* 🎁\n\n"
+        "⚽ *CASHBACK 100% MIX PARLAY*\n"
+        "• Minimal Bet: Rp 10.000\n"
+        "• Minimal 5 tim (TODAY)\n"
+        "• Odds Minimal 1.80\n"
+        "• 1 tim Lose, sisanya Win Full\n"
+        "• Max Bonus: Rp 300.000/hari\n\n"
+        "📌 *Syarat:*\n"
+        "• Follow semua channel official\n"
+        "• Add Telegram Bot: @bolapelangi2_bot\n"
+        "• Klaim via WA: https://bopel2.link/wa\n\n"
+        "🚀 *GasPoll!*"
+    )
+    await update.message.reply_text(text, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
+
+async def aturan_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /aturan command"""
+    text = (
+        "📋 *SYARAT & KETENTUAN*\n\n"
+        "1. Bonus hanya bisa diklaim *1x sehari*\n"
+        "2. Maksimal bonus *Rp 300.000/hari*\n"
+        "3. Tidak boleh ada *kesamaan IP*\n"
+        "4. Tidak boleh *safety bet* atau kecurangan\n"
+        "5. Keputusan admin *mutlak*\n\n"
+        "⚠️ Jika ketahuan curang, bonus *HANGUS*!\n\n"
+        "✅ *Cara Klaim:*\n"
+        "• Gabung semua channel official\n"
+        "• Add bot @bolapelangi2_bot\n"
+        "• Kirim bukti ke WA: https://bopel2.link/wa"
+    )
+    await update.message.reply_text(text, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
+
+async def kontak_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle /kontak command"""
+    text = (
+        "📞 *KONTAK OFFICIAL BOLAPELANGI 2*\n\n"
+        "🟢 *WA Official (Klaim Bonus):*\n"
+        "https://bopel2.link/wa\n\n"
+        "📢 *Channel WhatsApp:*\n"
+        "https://bopel2.vip/Channel-Whatsapp\n\n"
+        "📢 *Channel Telegram:*\n"
+        "https://bopel2.vip/Channel-Telegram\n\n"
+        "🤖 *Bot Telegram:*\n"
+        "@bolapelangi2_bot\n\n"
+        "📈 *Prediksi & Jadwal:*\n"
+        "https://bopel2.vip/ChannelWA-Jadwal-Prediksi\n\n"
+        "🔥 *Follow semua biar gak ketinggalan info!*"
+    )
+    await update.message.reply_text(text, parse_mode=ParseMode.MARKDOWN, disable_web_page_preview=True)
+
 async def welcome_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """
     Fungsi untuk menyapa member baru yang bergabung ke channel
     """
-    
     # Cek apakah ini message dari channel
-    if not update.chat_post or not update.effective_chat:
+    if not update.channel_post:
         return
     
+    message = update.channel_post
     chat = update.effective_chat
-    message = update.chat_post
+    
+    # Log untuk debugging
+    logger.info(f"Message received in chat {chat.id} ({chat.title})")
     
     # Cek apakah ini di channel yang kita targetkan
-    if chat.username != CHANNEL_USERNAME.replace('@', '') and chat.id != CHANNEL_ID:
+    if chat.id != CHANNEL_ID:
+        logger.info(f"Ignoring chat {chat.id} - not target channel")
         return
     
     # Cek apakah ada member baru
     if not message.new_chat_members:
         return
     
+    logger.info(f"🎉 New member detected in channel!")
+    
     # Loop untuk setiap member baru
     for new_member in message.new_chat_members:
         # Jangan sapa bot sendiri
         if new_member.is_bot:
+            logger.info(f"Ignoring bot: {new_member.first_name}")
             continue
         
         # Dapatkan informasi member
@@ -84,224 +155,64 @@ async def welcome_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE)
         first_name = new_member.first_name or "Member"
         username = f"@{new_member.username}" if new_member.username else first_name
         
-        # Buat mention (bisa pakai markdown atau teks biasa)
-        mention_markdown = f"[{first_name}](tg://user?id={user_id})"
-        mention_text = f"@{new_member.username}" if new_member.username else first_name
+        logger.info(f"👤 New human member: {first_name} (ID: {user_id})")
         
-        # Kirim pesan welcome ke channel (sebagai pengumuman)
-        welcome_text = f"""
-🎉 *SELAMAT DATANG* 🎉
-
-Halo {mention_markdown}!
-Selamat bergabung di *BOLAPELANGI 2 Official Channel*!
-
-Jangan lupa follow:
-• Bot: @bolapelangi2_bot
-• WA: [Klik Disini](https://bopel2.vip/Channel-Whatsapp)
-• TG: [Klik Disini](https://bopel2.vip/Channel-Telegram)
-
-🔥 *GasPoll!* 🔥
-        """
+        # Buat mention
+        mention = f"[{first_name}](tg://user?id={user_id})"
+        
+        # Kirim pesan welcome ke channel
+        welcome_text = (
+            f"🎉 *SELAMAT DATANG* 🎉\n\n"
+            f"Halo {mention}!\n"
+            f"Selamat bergabung di *BOLAPELANGI 2 Official Channel*!\n\n"
+            f"Jangan lupa follow:\n"
+            f"• Bot: @bolapelangi2_bot\n"
+            f"• WA: [Klik Disini](https://bopel2.vip/Channel-Whatsapp)\n"
+            f"• TG: [Klik Disini](https://bopel2.vip/Channel-Telegram)\n\n"
+            f"🔥 *GasPoll!* 🔥"
+        )
         
         try:
-            await message.reply_text(
+            await context.bot.send_message(
+                chat_id=chat.id,
                 text=welcome_text,
                 parse_mode=ParseMode.MARKDOWN,
                 disable_web_page_preview=True
             )
-            logger.info(f"Welcome message sent to {first_name} (ID: {user_id})")
+            logger.info(f"✅ Welcome message sent to {first_name} in channel")
         except Exception as e:
-            logger.error(f"Failed to send welcome message: {e}")
+            logger.error(f"❌ Failed to send welcome message in channel: {e}")
         
-        # OPSIONAL: Kirim pesan private ke member baru
+        # Coba kirim pesan private
         try:
-            private_message = f"""
-Halo {first_name}!
-
-Terima kasih sudah bergabung dengan *BOLAPELANGI 2*! 🎉
-
-Kami punya PROMO SPESIAL untuk member baru:
-⚽ *CASHBACK 100% MIX PARLAY*
-• Modal Rp 10.000
-• 5 tim TODAY
-• Odds 1.80
-• Max bonus Rp 300.000
-
-📱 *Link Penting:*
-• Klaim Bonus: https://bopel2.link/wa
-• Prediksi Jitu: https://bopel2.vip/ChannelWA-Jadwal-Prediksi
-
-GasPoll terus Bosku! 🚀
-            """
+            private_text = (
+                f"Halo {first_name}!\n\n"
+                f"Terima kasih sudah bergabung dengan *BOLAPELANGI 2*! 🎉\n\n"
+                f"Kami punya PROMO SPESIAL untuk member baru:\n"
+                f"⚽ *CASHBACK 100% MIX PARLAY*\n"
+                f"• Modal Rp 10.000\n"
+                f"• 5 tim TODAY\n"
+                f"• Odds 1.80\n"
+                f"• Max bonus Rp 300.000\n\n"
+                f"📱 *Link Penting:*\n"
+                f"• Klaim Bonus: https://bopel2.link/wa\n"
+                f"• Prediksi Jitu: https://bopel2.vip/ChannelWA-Jadwal-Prediksi\n\n"
+                f"GasPoll terus Bosku! 🚀"
+            )
             
             await context.bot.send_message(
                 chat_id=user_id,
-                text=private_message,
+                text=private_text,
                 parse_mode=ParseMode.MARKDOWN
             )
-            logger.info(f"Private message sent to {first_name} (ID: {user_id})")
+            logger.info(f"✅ Private message sent to {first_name}")
         except Exception as e:
-            logger.error(f"Failed to send private message to {user_id}: {e}")
-            # Bot mungkin tidak bisa memulai chat dengan user jika user belum pernah chat dengan bot
-
-
-async def track_member_join(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """
-    Fungsi alternatif untuk track member join via chat member update
-    """
-    if not update.my_chat_member:
-        return
-    
-    # Cek jika ada member baru di channel
-    if update.my_chat_member.new_chat_member.status == ChatMember.MEMBER:
-        chat = update.effective_chat
-        user = update.my_chat_member.from_user
-        
-        logger.info(f"New member detected via chat member: {user.first_name} in {chat.title}")
-        
-        # Kirim welcome message jika diperlukan
-        # (ini lebih kompleks dan membutuhkan setup webhook)
-
+            logger.info(f"⚠️ Could not send private message to {first_name}: {e}")
+            # Ini normal jika user belum pernah chat dengan bot
 
 async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Handle errors"""
-    logger.error(f"Update {update} caused error {context.error}")
-
-
-async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle /start command"""
-    user = update.effective_user
-    welcome_text = f"""
-Halo {user.first_name}! 👋
-
-Selamat datang di *BOLAPELANGI 2 Bot*!
-
-🤖 *Apa yang bisa saya bantu?*
-• Saya akan menyapa member baru di channel
-• Info promo terbaru
-• Cara klaim bonus
-
-📌 *Link Penting:*
-• Channel: @bolapelangi2_channel
-• Klaim Bonus: https://bopel2.link/wa
-• Prediksi: https://bopel2.vip/ChannelWA-Jadwal-Prediksi
-
-🔥 *GasPoll!* 🔥
-    """
-    
-    await update.message.reply_text(
-        text=welcome_text,
-        parse_mode=ParseMode.MARKDOWN
-    )
-
-
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle /help command"""
-    help_text = """
-📚 *BANTUAN BOT BOLAPELANGI 2*
-
-*Fitur Bot:*
-• /start - Mulai bot
-• /help - Bantuan ini
-• /promo - Info promo terbaru
-• /aturan - Syarat & ketentuan
-• /kontak - Kontak official
-
-*Untuk Admin:*
-Bot akan otomatis menyapa member baru yang join ke channel @bolapelangi2_channel
-
-*Kendala Teknis?*
-Hubungi WA Official: https://bopel2.link/wa
-    """
-    
-    await update.message.reply_text(
-        text=help_text,
-        parse_mode=ParseMode.MARKDOWN
-    )
-
-
-async def promo_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle /promo command"""
-    promo_text = """
-🎁 *PROMO SPESIAL BOLAPELANGI 2* 🎁
-
-⚽ *CASHBACK 100% MIX PARLAY*
-• Minimal Bet: Rp 10.000
-• Minimal 5 tim (TODAY)
-• Odds Minimal 1.80
-• 1 tim Lose, sisanya Win Full
-• Max Bonus: Rp 300.000/hari
-
-📌 *Syarat:*
-• Follow semua channel official
-• Add Telegram Bot: @bolapelangi2_bot
-• Klaim via WA: https://bopel2.link/wa
-
-🚀 *GasPoll!*
-    """
-    
-    await update.message.reply_text(
-        text=promo_text,
-        parse_mode=ParseMode.MARKDOWN,
-        disable_web_page_preview=True
-    )
-
-
-async def aturan_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle /aturan command"""
-    aturan_text = """
-📋 *SYARAT & KETENTUAN*
-
-1. Bonus hanya bisa diklaim *1x sehari*
-2. Maksimal bonus *Rp 300.000/hari*
-3. Tidak boleh ada *kesamaan IP*
-4. Tidak boleh *safety bet* atau kecurangan
-5. Keputusan admin *mutlak*
-
-⚠️ Jika ketahuan curang, bonus *HANGUS*!
-
-✅ *Cara Klaim:*
-• Gabung semua channel official
-• Add bot @bolapelangi2_bot
-• Kirim bukti ke WA: https://bopel2.link/wa
-    """
-    
-    await update.message.reply_text(
-        text=aturan_text,
-        parse_mode=ParseMode.MARKDOWN,
-        disable_web_page_preview=True
-    )
-
-
-async def kontak_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Handle /kontak command"""
-    kontak_text = """
-📞 *KONTAK OFFICIAL BOLAPELANGI 2*
-
-🟢 *WA Official (Klaim Bonus):*
-https://bopel2.link/wa
-
-📢 *Channel WhatsApp:*
-https://bopel2.vip/Channel-Whatsapp
-
-📢 *Channel Telegram:*
-https://bopel2.vip/Channel-Telegram
-
-🤖 *Bot Telegram:*
-@bolapelangi2_bot
-
-📈 *Prediksi & Jadwal:*
-https://bopel2.vip/ChannelWA-Jadwal-Prediksi
-
-🔥 *Follow semua biar gak ketinggalan info!*
-    """
-    
-    await update.message.reply_text(
-        text=kontak_text,
-        parse_mode=ParseMode.MARKDOWN,
-        disable_web_page_preview=True
-    )
-
+    logger.error(f"❌ Update {update} caused error {context.error}")
 
 # ==================== MAIN FUNCTION ====================
 
@@ -311,30 +222,40 @@ def main():
     # Buat aplikasi
     application = Application.builder().token(BOT_TOKEN).build()
     
-    # Tambahkan command handlers
-    application.add_handler(MessageHandler(filters.COMMAND & filters.Regex('^/start$'), start_command))
-    application.add_handler(MessageHandler(filters.COMMAND & filters.Regex('^/help$'), help_command))
-    application.add_handler(MessageHandler(filters.COMMAND & filters.Regex('^/promo$'), promo_command))
-    application.add_handler(MessageHandler(filters.COMMAND & filters.Regex('^/aturan$'), aturan_command))
-    application.add_handler(MessageHandler(filters.COMMAND & filters.Regex('^/kontak$'), kontak_command))
+    # Tambahkan command handlers (PAKAI COMMANDHANDLER, LEBIH SIMPEL)
+    application.add_handler(CommandHandler("start", start_command))
+    application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("promo", promo_command))
+    application.add_handler(CommandHandler("aturan", aturan_command))
+    application.add_handler(CommandHandler("kontak", kontak_command))
     
     # Handler untuk welcome message (via channel post)
-    application.add_handler(MessageHandler(filters.Chat(chat_id=CHANNEL_ID) & filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome_new_member))
-    
-    # Handler untuk track member join (alternatif)
-    application.add_handler(MessageHandler(filters.StatusUpdate.MY_CHAT_MEMBER, track_member_join))
+    application.add_handler(
+        MessageHandler(
+            filters.Chat(chat_id=CHANNEL_ID) & filters.StatusUpdate.NEW_CHAT_MEMBERS,
+            welcome_new_member
+        )
+    )
     
     # Error handler
     application.add_error_handler(error_handler)
     
     # Start bot
-    print("🤖 Bot BOLAPELANGI 2 is running...")
-    print(f"📢 Monitoring channel: {CHANNEL_USERNAME}")
+    print("=" * 50)
+    print("🤖 BOT BOLAPELANGI 2 WELCOME BOT")
+    print("=" * 50)
+    print(f"✅ Token: {BOT_TOKEN[:10]}...{BOT_TOKEN[-5:]}")
+    print(f"✅ Target Channel: {CHANNEL_USERNAME}")
+    print(f"✅ Channel ID: {CHANNEL_ID}")
+    print("=" * 50)
+    print("📢 Status: RUNNING")
+    print("📢 Menunggu member baru...")
+    print("=" * 50)
     print("Press Ctrl+C to stop")
+    print("=" * 50)
     
     # Run bot dengan polling
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
-
+    application.run_polling(allowed_updates=["message", "channel_post", "chat_member"])
 
 if __name__ == "__main__":
     main()
